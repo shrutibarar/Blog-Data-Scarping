@@ -2,30 +2,33 @@
     Hugging face model loader
 """
 
+from abc import ABC, abstractmethod
 
-class ModelLoader:
 
-    def __init__(self, model_id: str,
-                 use_device="auto"):
-        self.model_id = model_id
-        self.use_device=use_device
-        self.model = None
-        self.tokenizer = None
+class BaseModelLoader(ABC):
 
-    def load_mode(self):
-        try:
-            from transformers import AutoModel
-        except ImportError:
-            raise ImportError("transformers is not installed do 'pip install transformers'")
-        return AutoModel.from_pretrained(self.model_id,
-                                         use_device=self.use_device)
+    def __init__(self):
 
-    def load_tokenizer(self, model_id):
-        try:
-            from transformers import AutoTokenizer
-        except ImportError:
-            raise ImportError("transformers is not installed do 'pip install transformers'")
-        return AutoTokenizer.from_pretrained(model_id)
+        self.model = self.load_model()
+        self.tokenizer = self.load_tokenizer()
+        self.pipeline = self.load_pipeline()
 
-    def generate(self, inputs: str):
+    @abstractmethod
+    def load_model(self):
         ...
+
+    @abstractmethod
+    def load_tokenizer(self):
+        ...
+
+    @abstractmethod
+    def load_pipeline(self):
+        ...
+
+    def generate(self, inputs: str, **kwargs):
+        return self.pipeline(inputs, **kwargs)[0]["generated_text"]
+
+
+if __name__ == "__main__":
+    # test run
+    ...

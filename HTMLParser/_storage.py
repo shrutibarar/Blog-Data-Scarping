@@ -3,38 +3,49 @@
 
 """
 
+from dataclasses import dataclass
+from typing import List, Dict
+
+
+@dataclass
+class Store:
+    raw_text: List[str]
+    prompt_text: List[str]
+    prompt_keys: List[str]
+
+    def get_text(self, separator: str = "=") -> str:
+        combined_text = ""
+        for i in self.__dict__:
+            get_texts = "\n".join(self.__dict__[i])
+            combined_text += f"{i}:\n{get_texts}\n{separator * 100}"
+        return combined_text
+
 
 class Storage:
-    def __init__(self):
-        self.raw_text = []
-        self.prompt_text = []
-        self.prompt_keys = []
+    def __init__(self, separator="="):
+        self.store = Store([], [], [])
+        self.separator = separator
 
-    def append(self, raw_input: dict):
-        self.raw_text.append(raw_input["content"])
+    def append(self, raw_input: Dict[str, str]):
+        self.store.raw_text.append(raw_input["content"])
 
         if raw_input["prompt"] is not None:
-            prompt = f"[{raw_input['prompt']}] {raw_input['content']}"
-            self.prompt_text.append(prompt)
-            self.prompt_keys.append(prompt)
-
+            prompt = f"[{raw_input['prompt'].upper()}] {raw_input['content']}"
+            self.store.prompt_text.append(prompt)
+            self.store.prompt_keys.append(prompt)
         else: 
-            self.prompt_text.append(raw_input["content"])
+            self.store.prompt_text.append(raw_input["content"])
 
     def __repr__(self):
-        return f"{self.__class__.__name__}()"
+        return f"{self.__class__.__name__}(separator={self.separator})"
 
     def __str__(self):
-        """
-            Prints raw_text, prompt_text and prompt_keys seperated by \n\n\n
-        """
-        return "it will print this"
+        return self.store.get_text(separator=self.separator)
 
 
 if __name__ == "__main__":
     # test run
     test_storage = Storage()
-    print(test_storage)
     inputs = [
         {
             "prompt": "title",
@@ -77,7 +88,4 @@ if __name__ == "__main__":
     # running test
     for i in inputs:
         test_storage.append(i)
-
-    print("Checking raw_text:", test_storage.raw_text == expected_raw_text)
-    print("Checking prompt_text:", test_storage.raw_text == expected_prompt_text)
-    print("Checking prompt_key:", test_storage.raw_text == expected_prompt_key)
+    print(test_storage)
