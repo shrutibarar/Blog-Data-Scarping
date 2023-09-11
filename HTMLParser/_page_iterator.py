@@ -1,7 +1,7 @@
 from typing import Iterator
 
 
-class MyIterator(Iterator[str]):
+class PageIterator(Iterator[str]):
     def __init__(self, page: str, initial_point: str, seperator: dict):
         self.page = page
         self.index_at = 0
@@ -12,10 +12,20 @@ class MyIterator(Iterator[str]):
         return self
 
     def _skip_till_initial(self):
-        sliding_window = 0
-        while self.index_at < len(self.page):
-            ...
 
+        window = 0
+        initial_found = False
+
+        while self.index_at < len(self.page) and not initial_found:
+
+            if self.page[self.index_at] == self.initial_point[window]:
+                window += 1
+            if len(self.initial_point) < window:
+                initial_found = True
+
+            self.index_at += 1
+
+        return initial_found
 
     def __next__(self) -> str:
         raise StopIteration
