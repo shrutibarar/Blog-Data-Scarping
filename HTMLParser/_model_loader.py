@@ -128,7 +128,7 @@ if __name__ == "__main__":
     llm = OpenAIModelLoader("translate")
     print(llm.generate(
         {
-            "add_task": "to korean",
-            "sentence": "I love you baby <3"
+            "add_task": "to hinglish",
+            "sentence": "who is that person that won't give up training at the brink of death"
         }
     ))
