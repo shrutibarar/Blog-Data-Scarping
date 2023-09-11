@@ -78,3 +78,7 @@ Medium_format = {
 
 
 # keys for Medium website
+
+medium_key_format = {
+
+}

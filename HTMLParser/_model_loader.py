@@ -6,12 +6,17 @@ from abc import ABC, abstractmethod
 from langchain import PromptTemplate
 from langchain.chat_models import ChatOpenAI
 from langchain.chains import LLMChain
+from transformers import AutoTokenizer, AutoModelForCausalLM, pipeline
+import torch
 
 
 class BaseModelLoader(ABC):
 
-    def __init__(self, task):
+    def __init__(self, task: str):
         self.task = task
+        self.model = None
+        self.tokenizer = None
+        self.pipeline = None
 
     @property
     def task(self):
@@ -28,7 +33,7 @@ class BaseModelLoader(ABC):
         self._task = val
 
     @abstractmethod
-    def load_model(self, model_key_or_id, **kwargs):
+    def load_model(self, **kwargs):
         ...
 
     @abstractmethod
@@ -40,7 +45,7 @@ class BaseModelLoader(ABC):
         ...
 
     @abstractmethod
-    def generate(self, inputs: str, **kwargs):
+    def generate(self, **kwargs):
         ...
 
 
@@ -73,8 +78,50 @@ class OpenAIModelLoader(BaseModelLoader):
                                  sentence=inputs["sentence"])
 
 
+class LlamaGPTQ(BaseModelLoader):
+
+    def __init__(self, task):
+        super().__init__(task)
+
+        self.prompt = PromptTemplate.from_template(
+            """[INST] <<SYS>>
+                You're a truthful assistant who {task} languages correctly else reply 'failed'
+                <</SYS>>
+                {task} {add_task}: {sentence}
+                [/INST]
+            """
+        )
+
+    def load_model(self, model_name_or_path: str, revision: str = "main"):
+        return AutoModelForCausalLM.from_pretrained(
+            model_name_or_path,
+            torch_dtype=torch.float16,
+            device_map="auto",
+            revision=revision
+        )
+
+    def load_tokenizer(self, model_name_or_path, **kwargs):
+        return AutoTokenizer.from_pretrained(model_name_or_path, use_fast=True)
+
+    def load_pipeline(self, max_new_tokens: int = 512, temperature: int = 0.7,
+                      top_p: int = 0.95):
+        return pipeline(
+            "text-generation",
+            model=self.model,
+            tokenizer=self.tokenizer,
+            max_new_tokens=max_new_tokens,
+            top_p=top_p,
+            temperature=temperature
+        )
+
+    def generate(self, inputs: dict, **kwargs):
+        prompt = self.prompt.format(task=self.task, add_task=inputs["add_task"],
+                                    sentence=inputs["sentence"])
+        return self.pipeline(prompt)
+
+
 if __name__ == "__main__":
-    # test run
+    # test openAI run
     from config import openai_key
     import os
     os.environ["OPENAI_API_KEY"] = openai_key
