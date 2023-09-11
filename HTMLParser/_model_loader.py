@@ -25,8 +25,9 @@ class BaseModelLoader(ABC):
     def load_pipeline(self):
         ...
 
+    @abstractmethod
     def generate(self, inputs: str, **kwargs):
-        return self.pipeline(inputs, **kwargs)[0]["generated_text"]
+        ...
 
 
 if __name__ == "__main__":
