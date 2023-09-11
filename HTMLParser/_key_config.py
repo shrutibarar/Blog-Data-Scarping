@@ -4,24 +4,40 @@ base_key_format = {
 
     # main content to be scrapped from focus
     "focus": {
-        "div": "class_name"
+        "div": "ch bg et eu ev ew"
     },
 
     # tags and their respective titles and contents to be scrapped
     "contents": {
         "h1": {
-            "class_name": "what it does? e.g Title",
-            "class_name_2": "Key points"
+            "pw-post-title": "Title",
+            "Data-selectable-paragraph": "Key points"
         },
         "h2": {
-            "class_name": "subtitle",
-            "class_name_2": "major points",
-        }
+            "Pw-subtitle-paragraph": "subtitle",
+            "sub-sub-title": "major points",
+        },
+
+        "li": {
+            "data-selectable-paragraph": None
+        },
+    },
+    "paragraph": {
+        "p": {
+            " pw-post-body-paragraph": None,
+            "em": None,
+            "a": None,
+            "af nc": None,
+            "data-selectable-paragraph": None
+        },
     },
     "figures": {
         "path": None    # if none then use a default path
     },
     "links": False      # either include links or not by default its false
-}
+ }
+
+
+
 
 # keys for Medium website
