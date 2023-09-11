@@ -11,6 +11,7 @@ import torch
 
 
 class BaseModelLoader(ABC):
+    """Abstract base class for loading models."""
 
     def __init__(self, task: str):
         self.task = task
@@ -34,22 +35,27 @@ class BaseModelLoader(ABC):
 
     @abstractmethod
     def load_model(self, **kwargs):
-        ...
+        """Load the model."""
+        pass
 
     @abstractmethod
     def load_tokenizer(self, **kwargs):
-        ...
+        """Load the tokenizer."""
+        pass
 
     @abstractmethod
     def load_pipeline(self, **kwargs):
-        ...
+        """Load the processing pipeline."""
+        pass
 
     @abstractmethod
     def generate(self, **kwargs):
-        ...
+        """Generate output based on input."""
+        pass
 
 
 class OpenAIModelLoader(BaseModelLoader):
+    """Loads models for translation and recognition using OpenAI's GPT-3."""
     def __init__(self, task: str, **kwargs):
         super().__init__(task)
 
@@ -65,20 +71,25 @@ class OpenAIModelLoader(BaseModelLoader):
         self.pipeline = self.load_pipeline()
 
     def load_model(self, **kwargs):
+        """Load the model and return from ChatOpenAI(**kwargs)"""
         return ChatOpenAI(**kwargs)
 
     def load_tokenizer(self):
+        """Load the tokenizer."""
         return None
 
     def load_pipeline(self):
+        """Load the processing pipeline."""
         return LLMChain(llm=self.model, prompt=self.prompt)
 
     def generate(self, inputs: dict, **kwargs):
+        """Generate output based on input."""
         return self.pipeline.run(task=self.task, add_task=inputs["add_task"],
                                  sentence=inputs["sentence"])
 
 
 class LlamaGPTQ(BaseModelLoader):
+    """Loads models for various language tasks using Hugging Face's transformers library."""
 
     def __init__(self, task):
         super().__init__(task)
@@ -115,6 +126,7 @@ class LlamaGPTQ(BaseModelLoader):
         )
 
     def generate(self, inputs: dict, **kwargs):
+        """Generate output based on input."""
         prompt = self.prompt.format(task=self.task, add_task=inputs["add_task"],
                                     sentence=inputs["sentence"])
         return self.pipeline(prompt)
