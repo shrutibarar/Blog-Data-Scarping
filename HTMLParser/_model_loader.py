@@ -30,6 +30,21 @@ class BaseModelLoader(ABC):
         ...
 
 
+class OpenAIModelLoader(BaseModelLoader):
+
+    def load_model(self):
+        pass
+
+    def load_tokenizer(self):
+        pass
+
+    def load_pipeline(self):
+        pass
+
+    def generate(self, inputs: str, **kwargs):
+        pass
+
+
 if __name__ == "__main__":
     # test run
     ...
