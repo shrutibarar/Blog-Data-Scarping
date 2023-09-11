@@ -3,10 +3,7 @@
 base_key_format = {
 
     # main content to be scrapped from focus
-    "focus": {
-        "div": "class_name"
-    },
-
+    "focus": "class_name",
     # tags and their respective titles and contents to be scrapped
     "contents": {
         "h1": {
