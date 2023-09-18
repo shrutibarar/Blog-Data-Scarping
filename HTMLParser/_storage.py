@@ -1,7 +1,7 @@
 """
 Module: _storage.py
 
-This module provides classes for storing text content with related prompts
+This module provides classes for storing html text content with related prompts
 
 Classes:
     - Store: A container for raw text and prompt text
@@ -20,7 +20,7 @@ from typing import List, Dict
 @dataclass
 class Store:
     """
-        Store: A container for raw text and prompt text..
+        Store: A container for raw text and prompt text.
 
         Attributes:
              raw_text (List[str]): Stores raw text content.
@@ -37,7 +37,7 @@ class Store:
 
     def get_text(self, separator: str = "=") -> str:
         """
-        Get formatted text combining raw and prompt text.
+        Get formatted text combining raw, prompt text and prompt keys.
 
         Args:
             separator (str): The separator string to use. Default is "=".
