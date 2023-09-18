@@ -33,7 +33,7 @@ medium_key_format = {
             "Data-selectable-paragraph": "Key points"
         },
         "h2": {
-            "Pw-subtitle-paragraph": "subtitle",
+            "pw-subtitle-paragraph": "subtitle",
             "sub-sub-title": "major points",
         },
 
@@ -41,7 +41,7 @@ medium_key_format = {
             "data-selectable-paragraph": None
         },
         "p": {
-            " pw-post-body-paragraph": None,
+            "pw-post-body-paragraph": None,
             "em": None,
             "a": None,
             "af nc": None,

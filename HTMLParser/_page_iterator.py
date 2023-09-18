@@ -46,5 +46,14 @@ if __name__ == "__main__":
 
     test = PageIterator(test_page[0], focus="cz bm da db dc dd")
 
+    from HTMLParser._key_config import medium_key_format
+    from HTMLParser._key_extractor import KeyExtractor
+
+    extractor = KeyExtractor(medium_key_format["contents"])
+
     for i in test:
-        print(i)
+        res = extractor.extract(i)
+        if res is None:
+            continue
+        print(res)
+
