@@ -100,7 +100,7 @@ class Storage:
             prompt = f"[{raw_input['prompt'].upper()}] {raw_input['content']}"
             self.store.prompt_text.append(prompt)
             self.store.prompt_keys.append(prompt)
-        else: 
+        else:
             self.store.prompt_text.append(raw_input["content"])
 
     def __repr__(self):

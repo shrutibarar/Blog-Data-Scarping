@@ -3,8 +3,8 @@ from bs4 import BeautifulSoup
 
 
 class PageIterator(Iterator[dict]):
-    def __init__(self, page: str, focus: str = None):
-        self.soup = BeautifulSoup(page, "html.parser")
+    def __init__(self, page, focus: str = None):
+        self.soup = BeautifulSoup(page.text, "html.parser")
         self.iter_tag = None
         self.focus = focus
         if focus:
@@ -14,6 +14,7 @@ class PageIterator(Iterator[dict]):
 
     def get_to_focus(self):
         focus = self.soup.find_all(class_=self.focus)
+        print(focus)
         filtered_page = ""
         for i in focus:
             filtered_page += str(i)

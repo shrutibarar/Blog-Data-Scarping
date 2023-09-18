@@ -23,10 +23,7 @@ base_key_format = {
 # medium website content format keys
 medium_key_format = {
 
-    "focus": {
-        "div": "ch bg et eu ev ew"
-    },
-
+    "focus": None,
     "contents": {
         "h1": {
             "pw-post-title": "Title",
